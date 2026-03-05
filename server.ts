@@ -4,7 +4,7 @@ import Database from "better-sqlite3";
 const app = express();
 app.use(express.json());
 
-const db = new Database("accommodation.db");
+const db = new Database("placestostay.db");
 
 // Part A (Q1) - This will get all accomodations in the given location 
 app.get("/accommodation/location/:location", (req, res) => {
@@ -30,4 +30,10 @@ app.get("/accommodation/location/:location/type/:type", (req, res) => {
   } catch (error) {
     res.status(500).json({ error });
   }
+});
+
+const PORT = 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
