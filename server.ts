@@ -7,12 +7,25 @@ app.use(express.json());
 const db = new Database("accommodation.db");
 
 // Part A (Q1) - This will get all accomodations in the given location 
-app.get("/accommodation/:location", (req, res) => {
+app.get("/accommodation/location/:location", (req, res) => {
   try {
     const stmt = db.prepare(
       "SELECT * FROM accommodation WHERE location = ?"
     );
     const results = stmt.all(req.params.location);
+    res.json(results);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+});
+
+// Part A (Q2) - This will get all accomodations in a given location and type
+app.get("/accommodation/location/:location/type/:type", (req, res) => {
+  try {
+    const stmt = db.prepare(
+      "SELECT * FROM accommodation WHERE location = ? AND type = ?"
+    );
+    const results = stmt.all(req.params.location, req.params.type);
     res.json(results);
   } catch (error) {
     res.status(500).json({ error });
