@@ -1,5 +1,6 @@
 import express from "express";
 import Database from "better-sqlite3";
+import ViteExpress from "vite-express";
 
 const app = express();
 app.use(express.json());
@@ -76,9 +77,7 @@ app.post("/booking", (req, res) => {
   }
 });
 
-const PORT = 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+ViteExpress.listen(app, 3000, () => {
+  console.log("Server running on http://localhost:3000");
 });
 
