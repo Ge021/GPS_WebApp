@@ -1,8 +1,11 @@
 {
   "compilerOptions": {
+    "target": "esnext",
     "strict": true,
     "noEmit": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "jsx": "preserve"
   },
-  "files": ["server.ts"]
+  "files": ["src/main.tsx"]
 }
