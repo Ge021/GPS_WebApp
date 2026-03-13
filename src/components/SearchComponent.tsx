@@ -40,7 +40,7 @@ export default function SearchComponent({
         }
 
         const response = await fetch(
-            `/api/accommodation/location/${location}`
+            `/accommodation/location/${location}`
         );
         const json = await response.json();
 
