@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import SearchComponent from "./components/SearchComponent"
 
 export interface Accommodation {
     ID: number;
@@ -10,4 +11,18 @@ export interface Accommodation {
     description: string;
 }
 
-export default function App() {}
+export default function App() {
+    const [results, setResults] = useState<Accommodation[]>([]);
+    const [message, setMessage] = useState<string>("");
+
+    return (
+        <div>
+            <h1>PlacesToStay</h1>
+            <SearchComponent
+                onResultsLoaded={setResults}
+                onMessageUpdated={setMessage}
+            />
+        </div>
+            )
+
+}

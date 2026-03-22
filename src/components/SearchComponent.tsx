@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState} from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Accommodation } from "../App";
 
 interface SearchComponentProps {
@@ -6,27 +6,11 @@ interface SearchComponentProps {
     onMessageUpdated: (message: string) => void;
 }
 
-
 export default function SearchComponent({
     onResultsLoaded,
-    onMessageUpdated
+    onMessageUpdated,
 }: SearchComponentProps) {
     const [location, setLocation] = useState("");
-
-    return (
-        <div>
-            <h2>Search Accommodation by Location</h2>
-            <fieldset>
-                <input
-                    type="text"
-                    value={location}
-                    onChange={locationChanged}
-                    placeholder="Enter location"
-                />
-                <input type="button" value="Search" onClick={searchAccommodation} />
-            </fieldset>
-        </div>
-    );
 
     function locationChanged(e: ChangeEvent<HTMLInputElement>) {
         setLocation(e.target.value);
@@ -38,12 +22,36 @@ export default function SearchComponent({
             onResultsLoaded([]);
             return;
         }
-
-        const response = await fetch(
-            `/accommodation/location/${location}`
-        );
-        const json = await response.json();
-
-        onResultsLoaded(json);
+        try {
+            const response = await fetch(`/accommodation/location/${location}`);
+            const json = await response.json();
+            if (json.length === 0) {
+                onMessageUpdated("No accommodation found for that location.");
+            } else {
+                onMessageUpdated("");
+            }
+            onResultsLoaded(json);
+        } catch {
+            onMessageUpdated("A network error occurred.");
+        }
     }
+
+    return (
+        <div>
+            <h2>Search Accommodation by Location</h2>
+            <div>
+                <input
+                    type="text"
+                    value={location}
+                    onChange={locationChanged}
+                    placeholder="Enter location"
+                />
+                <input
+                    type="button"
+                    value="Search"
+                    onClick={searchAccommodation}
+                />
+            </div>
+        </div>
+    );
 }
