@@ -27,9 +27,13 @@ export default function ResultsComponent({
             const json = await response.json();
 
             if (response.ok) {
-                onMessage(`Successfully booked "${name}"`);
+                onMessage(`Your booking at "${name}" was successful!`);
+            } else if (response.status === 400) {
+                onMessage("We couldn't complete your booking because some details were missing or invalid. Please try again.");
+            } else if (response.status === 500) {
+                onMessage("Something went wrong on our end. Please try again later.");
             } else {
-                onMessage(`Booking failed: ${json.error}`);
+                onMessage("An unexpected error occurred. Please try again.");
             }
         } catch {
             onMessage("A network error occurred while booking.");
