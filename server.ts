@@ -21,6 +21,7 @@ app.get("/accommodation/location/:location", (req, res) => {
   }
 });
 
+
 // Part A (Q2) - This will get all accomodations in a given location and type
 app.get("/accommodation/location/:location/type/:type", (req, res) => {
   try {
@@ -40,12 +41,12 @@ app.post("/booking", (req, res) => {
   try {
     const { accommodationId, people, date} = req.body;
     if (
-      typeof accommodationId !== "number" ||
-      typeof people !== "number" ||
-      typeof date !== "string"
+      typeof accommodationId !== "number" || accommodationId <= 0 ||
+      typeof people !== "number" || people <= 0 ||
+      typeof date !== "string" || date.trim() === ""
     ) {
       return res.status(400).json({
-        error: "accommodationId, people and date are required"
+        error: "Missing or invalid booking details."
       });
     }
 
