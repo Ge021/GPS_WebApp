@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SearchComponent from "./components/SearchComponent"
 import ResultsComponent from "./components/ResultsComponent"
+import MapComponent from "./components/MapComponent";
 
 export interface Accommodation {
     ID: number;
@@ -23,6 +24,9 @@ export default function App() {
                 onResultsLoaded={setResults}
                 onMessageUpdated={setMessage}
             />
+
+            <MapComponent accommodations={results} />
+
             {message && <p>{message}</p>}
             <ResultsComponent
                 accommodations={results}
