@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchComponent from "./components/SearchComponent"
 import ResultsComponent from "./components/ResultsComponent"
 import MapComponent from "./components/MapComponent";
+import LoginComponent from "./components/LoginComponent";
 
 export interface Accommodation {
     ID: number;
@@ -16,21 +17,33 @@ export interface Accommodation {
 export default function App() {
     const [results, setResults] = useState<Accommodation[]>([]);
     const [message, setMessage] = useState<string>("");
+    const [username, setUsername] = useState<string | null>(null);
+
+    useEffect(() => {
+        fetch("/login")
+            .then(r => r.json())
+            .then(json => setUsername(json.username));
+    }, []);
 
     return (
         <div>
             <h1>PlacesToStay</h1>
-            <SearchComponent
-                onResultsLoaded={setResults}
-                onMessageUpdated={setMessage}
+            <LoginComponent 
+                username={username} 
+                onLoginStatusChange={setUsername} 
+            
+            />
+            <SearchComponent 
+                onResultsLoaded={setResults} 
+                onMessageUpdated={setMessage} 
             />
 
+            {message && <p>{message}</p>}
             <MapComponent accommodations={results} />
 
-            {message && <p>{message}</p>}
-            <ResultsComponent
-                accommodations={results}
-                onMessage={setMessage}
+            <ResultsComponent 
+                accommodations={results} 
+                onMessage={setMessage} 
             />
         </div>
     );
