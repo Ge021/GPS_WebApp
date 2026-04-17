@@ -85,6 +85,10 @@ app.get("/accommodation/location/:location/type/:type", (req, res) => {
 
 // Part A (Q3) - This will get add a booking to the acc_bookngs table and change the number of availabilities depending on the number of people in the booking 
 app.post("/booking", (req, res) => {
+
+  if (!req.session.username) {
+    return res.status(401).json({ error: "You must be logged in to book an accomodation" });
+  }
   try {
     const { accommodationId, people, date} = req.body;
     if (

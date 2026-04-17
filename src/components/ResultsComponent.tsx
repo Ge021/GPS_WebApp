@@ -28,6 +28,8 @@ export default function ResultsComponent({
 
             if (response.ok) {
                 onMessage(`Your booking at "${name}" was successful!`);
+            } else if (response.status === 401) {
+                onMessage("You need to be logged in to make a booking. Please log in and try again")
             } else if (response.status === 400) {
                 onMessage("We couldn't complete your booking because some details were missing or invalid. Please try again.");
             } else if (response.status === 500) {
