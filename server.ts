@@ -91,6 +91,7 @@ app.post("/booking", (req, res) => {
   }
   try {
     const { accommodationId, people, date} = req.body;
+
     if (
       typeof accommodationId !== "number" || accommodationId <= 0 ||
       typeof people !== "number" || people <= 0 ||
@@ -100,6 +101,33 @@ app.post("/booking", (req, res) => {
         error: "Missing or invalid booking details."
       });
     }
+
+    const y = date.substring(0, 2);
+    const m = date.substring(2, 4);
+    const d = date.substring(4, 6);
+    const bookingDate = new Date(`20${y}-${m}-${d} 00:00:00Z`);
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+
+    if (bookingDate < today) {
+        return res.status(400).json({ error: "The selected date is in the past." });
+    }
+
+    const availability = db.prepare(`
+      SELECT availability FROM acc_dates
+      WHERE accID = ? AND thedate = ?
+    `).get(accommodationId, date) as { availability: number } | undefined;
+
+    if (!availability) {
+        return res.status(400).json({ error: "No availability found for that accommodation on that date." });
+    }
+    if (availability.availability < people) {
+        return res.status(400).json({ error: "There are not enough spaces available for that number of people on that date." });
+    }
+
+    
+
 
     const insertBooking = db.prepare(`
       INSERT INTO acc_bookngs (accID, thedate, npeople)
