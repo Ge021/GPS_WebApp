@@ -3,6 +3,7 @@ import Database from "better-sqlite3";
 import ViteExpress from "vite-express";
 import expressSession from "express-session";
 import betterSqlite3Session from "express-session-better-sqlite3";
+import bcrypt from "bcrypt";
 
 declare module "express-session" {
     export interface SessionData {
@@ -36,12 +37,17 @@ app.get("/login", (req, res) => {
     res.json({ username: req.session.username || null });
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
     const { username, password } = req.body;
-    const user = db.prepare("SELECT * FROM acc_users WHERE username = ? AND password = ?").get(username, password);
+    const user = db.prepare("SELECT * FROM acc_users WHERE username = ?").get(username) as { ID: number, username: string, password: string } | undefined;
     if (user) {
-        req.session.username = username;
-        res.json({ username });
+        const match = await bcrypt.compare(password, user.password);
+        if (match) {
+            req.session.username = username;
+            res.json({ username });
+        } else {
+            res.status(401).json({ error: "Incorrect username or password." });
+        }
     } else {
         res.status(401).json({ error: "Incorrect username or password." });
     }

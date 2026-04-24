@@ -11,8 +11,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/express-session": "^1.18.2",
     "@types/leaflet": "^1.9.21",
+    "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.6.2",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
