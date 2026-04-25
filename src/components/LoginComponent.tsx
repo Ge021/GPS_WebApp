@@ -31,18 +31,18 @@ export default function LoginComponent({ username, onLoginStatusChange }: LoginC
 
     if (username) {
         return (
-            <div>
+            <div className="login-status">
                 <p>Logged in as {username}</p>
-                <button onClick={logout}>Logout</button>
+                <button className="logout-btn" onClick={logout}>Logout</button>
             </div>
         );
     }
 
     return (
-        <div>
+        <div className="login-form">
             <h2>Login</h2>
-            <input type="text" placeholder="Username" value={enteredUsername} onChange={(e: ChangeEvent<HTMLInputElement>) => setEnteredUsername(e.target.value)} />
-            <input type="password" placeholder="Password" value={enteredPassword} onChange={(e: ChangeEvent<HTMLInputElement>) => setEnteredPassword(e.target.value)} />
+            <input type="text" placeholder="Username" value={enteredUsername} onChange={(e) => setEnteredUsername(e.target.value)} />
+            <input type="password" placeholder="Password" value={enteredPassword} onChange={(e) => setEnteredPassword(e.target.value)} />
             <button onClick={login}>Login</button>
             {message && <p>{message}</p>}
         </div>

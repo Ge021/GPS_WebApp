@@ -36,21 +36,12 @@ export default function SearchComponent({
         }
     }
 
-    return (
-        <div>
+return (
+        <div className="card">
             <h2>Search Accommodation by Location</h2>
             <div>
-                <input
-                    type="text"
-                    value={location}
-                    onChange={locationChanged}
-                    placeholder="Enter location"
-                />
-                <input
-                    type="button"
-                    value="Search"
-                    onClick={searchAccommodation}
-                />
+                <input type="text" value={location} onChange={locationChanged} placeholder="Enter location" />
+                <input type="button" value="Search" onClick={searchAccommodation} />
             </div>
         </div>
     );

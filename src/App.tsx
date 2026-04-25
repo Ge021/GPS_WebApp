@@ -25,26 +25,18 @@ export default function App() {
             .then(json => setUsername(json.username));
     }, []);
 
-    return (
+return (
         <div>
-            <h1>PlacesToStay</h1>
-            <LoginComponent 
-                username={username} 
-                onLoginStatusChange={setUsername} 
-            
-            />
-            <SearchComponent 
-                onResultsLoaded={setResults} 
-                onMessageUpdated={setMessage} 
-            />
-
-            {message && <p>{message}</p>}
-            <MapComponent accommodations={results} />
-
-            <ResultsComponent 
-                accommodations={results} 
-                onMessage={setMessage} 
-            />
+            <nav className="navbar">
+                <h1>PlacesToStay</h1>
+                <LoginComponent username={username} onLoginStatusChange={setUsername} />
+            </nav>
+            <div className="container">
+                <SearchComponent onResultsLoaded={setResults} onMessageUpdated={setMessage} />
+                {message && <p className="message">{message}</p>}
+                <MapComponent accommodations={results} />
+                <ResultsComponent accommodations={results} onMessage={setMessage} />
+            </div>
         </div>
     );
 }

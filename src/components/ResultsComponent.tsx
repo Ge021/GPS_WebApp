@@ -46,37 +46,32 @@ export default function ResultsComponent({
         }
     }
 
-    return (
-        <div>
-            <label>
-                Number of People:
-                <input
-                    type = "number"
-                    min = {1}
-                    value = {people}
-                    onChange = {(e) => setPeople(parseInt(e.target.value))}
-                />
-            </label>
-            <label>
-                Date:
-                <input
-                    type = "date"
-                    value = {date}
-                    onChange = {(e) => setDate(e.target.value)}
-                />
-            </label>
+return (
+        <div className="card">
+            <div className="booking-options">
+                <label>
+                    Number of People:
+                    <input type="number" min={1} value={people} onChange={(e) => setPeople(parseInt(e.target.value))} />
+                </label>
+                <label>
+                    Date:
+                    <input type="date" value={date} min={new Date().toISOString().split("T")[0]} onChange={(e) => setDate(e.target.value)} />
+                </label>
+            </div>
             <h2>Results ({accommodations.length} found)</h2>
-            {accommodations.map((acc) => (
-                <div key={acc.ID}>
-                    <h3>{acc.name}</h3>
-                    <p>Type: {acc.type}</p>
-                    <p>Location: {acc.location}</p>
-                    <p>Coordinates: {acc.latitude}, {acc.longitude}</p>
-                    <button onClick={() => bookAccommodation(acc.ID, acc.name)}>
-                        Book
-                    </button>
-                </div>
-            ))}
+            <div className="results-grid">
+                {accommodations.map((acc) => (
+                    <div className="card" key={acc.ID}>
+                        <h3>{acc.name}</h3>
+                        <p>Type: {acc.type}</p>
+                        <p>Location: {acc.location}</p>
+                        <p>{acc.description}</p>
+                        <button className="book-btn" onClick={() => bookAccommodation(acc.ID, acc.name)}>
+                            Book
+                        </button>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
