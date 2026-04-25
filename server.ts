@@ -4,6 +4,7 @@ import ViteExpress from "vite-express";
 import expressSession from "express-session";
 import betterSqlite3Session from "express-session-better-sqlite3";
 import bcrypt from "bcrypt";
+import xss from "xss";
 
 declare module "express-session" {
     export interface SessionData {
@@ -62,31 +63,42 @@ app.post("/logout", (req, res) => {
 
 // Part A (Q1) - This will get all accomodations in the given location 
 app.get("/accommodation/location/:location", (req, res) => {
-  try {
-    const stmt = db.prepare(
-      `SELECT * FROM accommodation 
-       WHERE location = ?`
-    );
-    const results = stmt.all(req.params.location);
-    res.json(results);
-  } catch (error) {
-    res.status(500).json({ error });
-  }
+    try {
+        const stmt = db.prepare(`SELECT * FROM accommodation WHERE location = ?`);
+        const results = stmt.all(req.params.location) as any[];
+        const sanitised = results.map(acc => ({
+            ...acc,
+            name: xss(acc.name),
+            description: xss(acc.description),
+            location: xss(acc.location),
+            type: xss(acc.type)
+        }));
+        res.json(sanitised);
+    } catch (error) {
+        res.status(500).json({ error: "Database error" });
+    }
 });
 
 
 // Part A (Q2) - This will get all accomodations in a given location and type
 app.get("/accommodation/location/:location/type/:type", (req, res) => {
-  try {
-    const stmt = db.prepare(
-      `SELECT * FROM accommodation 
-       WHERE location = ? AND type = ?`
-    );
-    const results = stmt.all(req.params.location, req.params.type);
-    res.json(results);
-  } catch (error) {
-    res.status(500).json({ error });
-  }
+    try {
+        const stmt = db.prepare(
+            `SELECT * FROM accommodation 
+             WHERE location = ? AND type = ?`
+        );
+        const results = stmt.all(req.params.location, req.params.type) as any[];
+        const sanitised = results.map(acc => ({
+            ...acc,
+            name: xss(acc.name),
+            description: xss(acc.description),
+            location: xss(acc.location),
+            type: xss(acc.type)
+        }));
+        res.json(sanitised);
+    } catch (error) {
+        res.status(500).json({ error });
+    }
 });
 
 // Part A (Q3) - This will get add a booking to the acc_bookngs table and change the number of availabilities depending on the number of people in the booking 
